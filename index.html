@@ -1,1 +1,97 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch Page</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('world_map.svg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 5px solid #333; /* Add a border around the entire webpage */
+            box-sizing: border-box; /* Include border in the element's total width and height */
+        }
+        .clock-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            text-align: right;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .clock {
+            margin-bottom: 5px;
+        }
+        .website-list {
+            font-size: 18px;
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: fit-content;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div class="clock" id="local-clock">Local: </div>
+        <div class="clock" id="pacific-clock">Pacific: </div>
+        <div class="clock" id="mountain-clock">Mountain: </div>
+        <div class="clock" id="central-clock">Central: </div>
+        <div class="clock" id="eastern-clock">Eastern: </div>
+        <div class="clock" id="utc-clock">UTC Time: </div>
+    </div>
+    <div class="website-list">
+        <a href="https://gmail.google.com">Gmail</a><br>
+        <a href="https://www.drudgereport.com">Drudge</a><br>
+        <a href="https://www.foxnews.com">Fox News</a><br>
+    </div>
+
+    <script>
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { hour12: false });
+        }
+
+        function updateClocks() {
+            const now = new Date();
+
+            // Local Time
+            document.getElementById('local-clock').textContent = 'Local: ' + formatTime(now);
+
+            // Eastern Time (UTC-5)
+            const easternTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            document.getElementById('eastern-clock').textContent = 'Eastern: ' + formatTime(easternTime);
+
+            // Central Time (UTC-6)
+            const centralTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+            document.getElementById('central-clock').textContent = 'Central: ' + formatTime(centralTime);
+
+            // Mountain Time (UTC-7)
+            const mountainTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }));
+            document.getElementById('mountain-clock').textContent = 'Mountain: ' + formatTime(mountainTime);
+
+            // Pacific Time (UTC-8)
+            const pacificTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+            document.getElementById('pacific-clock').textContent = 'Pacific: ' + formatTime(pacificTime);
+
+            // UTC Time
+            const utcTime = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+            document.getElementById('utc-clock').textContent = 'UTC: ' + formatTime(utcTime);
+        }
+
+        setInterval(updateClocks, 1000);
+        updateClocks(); // Initial call to set the clocks immediately
+    </script>
+</body>
+</html>
