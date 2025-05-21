@@ -16,16 +16,15 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            border: 5px solid #333; /* Add a border around the entire webpage */
-            box-sizing: border-box; /* Include border in the element's total width and height */
         }
         .clock-container {
             position: absolute;
             top: 10px;
             right: 10px;
             font-size: 18px;
+            margin: 20px;
             text-align: right;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(0, 255, 160, 0.5);
             padding: 10px;
             border-radius: 5px;
         }
@@ -33,9 +32,12 @@
             margin-bottom: 5px;
         }
         .website-list {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             font-size: 18px;
             margin: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(0, 255, 160, 0.5);
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -56,11 +58,13 @@
         <a href="https://gmail.google.com">Gmail</a><br>
         <a href="https://www.drudgereport.com">Drudge</a><br>
         <a href="https://www.foxnews.com">Fox News</a><br>
+        <a href="https://hotair.com">Hot Air</a><br>
     </div>
 
     <script>
         function formatTime(date) {
-            return date.toLocaleTimeString('en-US', { hour12: false });
+//            return date.toLocaleTimeString('en-US', { hour12: false });
+            return date.toLocaleTimeString('en-US', { hour12:false, hour: "2-digit", minute: "2-digit" });
         }
 
         function updateClocks() {
