@@ -17,6 +17,17 @@
             background-position: center;
             background-repeat: no-repeat;
         }
+        .suns-container {
+            position: absolute;
+            top: 200px;
+            right: 10px;
+            font-size: 18px;
+            margin: 20px;
+            text-align: right;
+            background-color: rgba(0, 255, 160, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
         .clock-container {
             position: absolute;
             top: 10px;
@@ -54,6 +65,7 @@
         <div class="clock" id="eastern-clock">Eastern: </div>
         <div class="clock" id="utc-clock">UTC Time: </div>
     </div>
+
     <div class="website-list">
         <a href="https://gmail.google.com">Gmail</a><br>
         <a href="https://www.drudgereport.com">Drudge</a><br>
@@ -61,7 +73,45 @@
         <a href="https://hotair.com">Hot Air</a><br>
     </div>
 
+    <div class="suns-container">
+        <div id="sunrise"></div>
+        <div id="sunset"></div>
+        <div id="timezone"></div>
+    </div>
+
     <script>
+
+        // ------------------------------------------------------------------------------------------------
+        async function getSunriseSunset(latitude, longitude) {
+
+          //const url = `https://api.sunrise-sunset.org/json?tzid=America/Phoenix&lat=${latitude}&lng=${longitude}&date=today`;
+          //const url = `https://api.sunrisesunset.io/json?lat=${latitude}&lng=${longitude}&timezone=America/Phoenix&time_format=military`;
+          const url = `https://api.sunrisesunset.io/json?lat=${latitude}&lng=${longitude}&timezone=America/Phoenix&time_format=24`;
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.results) {
+              const sunrise = data.results.sunrise;
+              const sunset = data.results.sunset;
+              const timezone = data.results.timezone;
+
+              document.getElementById('sunrise').textContent = `Sunrise: ${sunrise}`;
+              document.getElementById('sunset').textContent = `Sunset: ${sunset}`;
+              document.getElementById('timezone').textContent = `${timezone}`;
+            } else {
+              console.error("Error fetching sunrise/sunset data:", data.status);
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        }
+
+        // Example usage with a specific location
+        getSunriseSunset(33.305934, -112.017329); // Example for HOME
+        // ------------------------------------------------------------------------------------------------
+
+
         function formatTime(date) {
 //            return date.toLocaleTimeString('en-US', { hour12: false });
             return date.toLocaleTimeString('en-US', { hour12:false, hour: "2-digit", minute: "2-digit" });
