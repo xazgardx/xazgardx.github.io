@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Toggle Buttons</title>
+    <style>
+        body {
+            font-family: Consolas, monospace; /* Use Consolas font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            border: 2px solid #000; /* Draw a box around the entire screen contents */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: 1px solid #000; /* Draw a box around each group */
+            margin: 5px; /* Add spacing between groups */
+            padding: 5px; /* Add padding inside the box */
+        }
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            width: 50px; /* Set a fixed width for all buttons */
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center; /* Center text in buttons */
+            margin: 0; /* Remove spacing between buttons */
+        }
+        .bit-value {
+            font-size: 28px; /* Double the size of the font underneath the buttons */
+            margin-top: 5px;
+        }
+        #binary-display, #hex-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #clear-button {
+            width: 100px; /* Ensure the button is wide enough for the text */
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center; /* Center text in the clear button */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="button-container" id="buttonContainerTop"></div>
+        <div class="button-container" id="buttonContainerBottom"></div>
+        <div id="binary-display">Binary: 0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000</div>
+        <div id="hex-display">Hexadecimal: 0000_0000_0000_0000</div>
+        <button id="clear-button">Clear</button>
+        <br><a href="index.html">Return</a>
+    </div>
+
+    <script>
+        const buttonContainerTop = document.getElementById('buttonContainerTop');
+        const buttonContainerBottom = document.getElementById('buttonContainerBottom');
+        const binaryDisplay = document.getElementById('binary-display');
+        const hexDisplay = document.getElementById('hex-display');
+        const clearButton = document.getElementById('clear-button');
+        let binaryNumber = BigInt(0);
+
+        function createButtonGroup(container, start, end) {
+            for (let i = start; i >= end; i -= 4) {
+                const buttonGroup = document.createElement('div');
+                buttonGroup.className = 'button-group';
+
+                for (let j = i; j > i - 4 && j >= end; j--) {
+                    const buttonWrapper = document.createElement('div');
+                    buttonWrapper.className = 'button-wrapper';
+
+                    const button = document.createElement('button');
+                    button.textContent = j;
+                    button.addEventListener('click', () => toggleBit(j));
+
+                    const bitValue = document.createElement('span');
+                    bitValue.className = 'bit-value';
+                    bitValue.textContent = '0';
+
+                    buttonWrapper.appendChild(button);
+                    buttonWrapper.appendChild(bitValue);
+                    buttonGroup.appendChild(buttonWrapper);
+                }
+
+                container.appendChild(buttonGroup);
+            }
+        }
+
+        // Create button groups for 63 to 32
+        createButtonGroup(buttonContainerTop, 63, 32);
+
+        // Create button groups for 31 to 0
+        createButtonGroup(buttonContainerBottom, 31, 0);
+
+        clearButton.addEventListener('click', clearBits);
+
+        function toggleBit(position) {
+            // Toggle the bit at the given position using BigInt
+            binaryNumber ^= BigInt(1) << BigInt(position);
+            updateBinaryDisplay();
+            updateHexDisplay();
+            updateBitValues();
+        }
+
+        function clearBits() {
+            // Reset the binary number to 0
+            binaryNumber = BigInt(0);
+            updateBinaryDisplay();
+            updateHexDisplay();
+            updateBitValues();
+        }
+
+        function formatWithUnderscores(str, groupSize) {
+            return str.replace(new RegExp(`(.{${groupSize}})(?=.)`, 'g'), '$1_');
+        }
+
+        function updateBinaryDisplay() {
+            // Convert the number to a 64-bit binary string
+            const binaryString = binaryNumber.toString(2).padStart(64, '0');
+            const formattedBinary = formatWithUnderscores(binaryString, 4);
+            binaryDisplay.textContent = `Binary: ${formattedBinary}`;
+        }
+
+        function updateHexDisplay() {
+            // Convert the number to a 16-character hexadecimal string
+            const hexString = binaryNumber.toString(16).padStart(16, '0').toUpperCase();
+            const formattedHex = formatWithUnderscores(hexString, 4);
+            hexDisplay.textContent = `Hexadecimal: ${formattedHex}`;
+        }
+
+        function updateBitValues() {
+            // Update each bit value display
+            const bitValuesTop = buttonContainerTop.querySelectorAll('.bit-value');
+            const bitValuesBottom = buttonContainerBottom.querySelectorAll('.bit-value');
+            for (let i = 63; i >= 32; i--) {
+                const bitValue = (binaryNumber & (BigInt(1) << BigInt(i))) ? '1' : '0';
+                bitValuesTop[63 - i].textContent = bitValue;
+            }
+            for (let i = 31; i >= 0; i--) {
+                const bitValue = (binaryNumber & (BigInt(1) << BigInt(i))) ? '1' : '0';
+                bitValuesBottom[31 - i].textContent = bitValue;
+            }
+        }
+    </script>
+
+</body>
+</html>
