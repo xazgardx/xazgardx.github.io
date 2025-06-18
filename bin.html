@@ -46,6 +46,10 @@
             cursor: pointer;
             text-align: center; /* Center text in buttons */
             margin: 0; /* Remove spacing between buttons */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+        button:hover {
+            background-color: red; /* Change color to red on hover */
         }
         .bit-value {
             font-size: 24px; /* Double the size of the font underneath the buttons */
@@ -161,10 +165,12 @@
             for (let i = 63; i >= 32; i--) {
                 const bitValue = (binaryNumber & (BigInt(1) << BigInt(i))) ? '1' : '0';
                 bitValuesTop[63 - i].textContent = bitValue;
+                bitValuesTop[63 - i].style.color = bitValue === '1' ? 'red' : 'black';
             }
             for (let i = 31; i >= 0; i--) {
                 const bitValue = (binaryNumber & (BigInt(1) << BigInt(i))) ? '1' : '0';
                 bitValuesBottom[31 - i].textContent = bitValue;
+                bitValuesBottom[31 - i].style.color = bitValue === '1' ? 'red' : 'black';
             }
         }
     </script>
