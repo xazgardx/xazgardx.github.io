@@ -40,7 +40,7 @@
             align-items: center;
         }
         button {
-            width: 40px; /* Set a fixed width for all buttons */
+            width: 35px; /* Set a fixed width for all buttons */
             padding: 5px;
             font-size: 16px;
             cursor: pointer;
@@ -69,6 +69,14 @@
             cursor: pointer;
             text-align: center; /* Center text in the clear button */
         }
+        #set-button {
+            width: 100px; /* Ensure the button is wide enough for the text */
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center; /* Center text in the set button */
+        }
     </style>
 </head>
 <body>
@@ -79,6 +87,7 @@
         <div id="binary-display">Bin: 0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000</div>
         <div id="hex-display">Hex: 0000_0000_0000_0000</div>
         <button id="clear-button">Clear</button>
+        <button id="set-button">Set</button>
         <br><a href="index.html">Return</a>
     </div>
 
@@ -88,6 +97,7 @@
         const binaryDisplay = document.getElementById('binary-display');
         const hexDisplay = document.getElementById('hex-display');
         const clearButton = document.getElementById('clear-button');
+        const setButton = document.getElementById('set-button');
         let binaryNumber = BigInt(0);
 
         function createButtonGroup(container, start, end) {
@@ -123,6 +133,7 @@
         createButtonGroup(buttonContainerBottom, 31, 0);
 
         clearButton.addEventListener('click', clearBits);
+        setButton.addEventListener('click', setBits);
 
         function toggleBit(position) {
             // Toggle the bit at the given position using BigInt
@@ -135,6 +146,15 @@
         function clearBits() {
             // Reset the binary number to 0
             binaryNumber = BigInt(0);
+            updateBinaryDisplay();
+            updateHexDisplay();
+            updateBitValues();
+        }
+        
+        function setBits() {
+            // Reset the binary number to all F's
+            binaryNumber = BigInt(0xFFFFFFFF);
+            //binaryNumber = BigInt(18446744073709551615);
             updateBinaryDisplay();
             updateHexDisplay();
             updateBitValues();
