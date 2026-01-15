@@ -374,21 +374,21 @@
         function addCharacter(character) {
             const inputText = document.getElementById('inputText');
             inputText.value += character;
-            inputText.focus();
+//            inputText.focus();
         }
 
         // Add space to input text area
         function addSpace() {
             const inputText = document.getElementById('inputText');
             inputText.value += ' ';
-            inputText.focus();
+//            inputText.focus();
         }
 
         // Remove last character (backspace)
         function backspace() {
             const inputText = document.getElementById('inputText');
             inputText.value = inputText.value.slice(0, -1);
-            inputText.focus();
+//            inputText.focus();
         }
 
         // Clear both input and output text areas
@@ -399,7 +399,7 @@
             inputText.value = '';
             outputText.value = '';
             padText.value = '';
-            inputText.focus();
+//            inputText.focus();
         }
 
 
@@ -476,10 +476,10 @@
             generateKeyboard();
         };
 
-        // Allow physical keyboard input as well
-        document.getElementById('inputText').addEventListener('input', function() {
-            // This allows users to also type with their physical keyboard
-        });
+//        // Allow physical keyboard input as well
+//        document.getElementById('inputText').addEventListener('input', function() {
+//            // This allows users to also type with their physical keyboard
+//        });
     </script>
 </body>
 </html>
