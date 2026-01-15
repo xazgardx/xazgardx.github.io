@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT37 Keyboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+            background-color: #f0f0f0;
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        .text-areas {
+            margin-bottom: 20px;
+        }
+
+        .text-area-container {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .keyboard {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+            gap: 4px;
+        }
+
+        .keyboard-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Number row - no offset */
+        .keyboard-row.number-row {
+            margin-left: 0;
+        }
+
+        /* Offset for letter rows to mimic real keyboard */
+        .keyboard-row.letter-row:nth-child(2) {
+            margin-left: 20px;
+        }
+
+        .keyboard-row.letter-row:nth-child(3) {
+            margin-left: 35px;
+        }
+
+        .key {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 12px 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 45px;
+            min-width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            max-width: 50px;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        .key.number-key {
+            background-color: #f9f9f9;
+            border-color: #ccc;
+        }
+
+        .key:hover {
+            background-color: #e8e8e8;
+            border-color: #bbb;
+        }
+
+        .key:active {
+            background-color: #d0d0d0;
+            transform: scale(0.95);
+        }
+
+        .special-keys {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .special-key {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        .special-key.clear-key {
+            background-color: #f44336;
+        }
+
+        .special-key.clear-key:hover {
+            background-color: #d32f2f;
+        }
+
+        .special-key.space-key {
+            background-color: #4CAF50;
+        }
+
+        .special-key.space-key:hover {
+            background-color: #45a049;
+        }
+
+        .special-key.backspace-key {
+            background-color: #ff9800;
+        }
+
+        .special-key.backspace-key:hover {
+            background-color: #f57c00;
+        }
+
+        .special-key:active {
+            transform: scale(0.95);
+        }
+
+        .convert-btn {
+            width: 100%;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        .convert-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .convert-btn:active {
+            transform: scale(0.98);
+        }
+
+        .conversion-info {
+            background-color: #e3f2fd;
+            border: 1px solid #2196F3;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #1976D2;
+            font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .keyboard {
+                padding: 10px;
+            }
+
+            .keyboard-row {
+                gap: 2px;
+                margin-bottom: 6px;
+            }
+
+            .keyboard-row.letter-row:nth-child(2) {
+                margin-left: 15px;
+            }
+
+            .keyboard-row.letter-row:nth-child(3) {
+                margin-left: 25px;
+            }
+
+            .key {
+                padding: 10px 5px;
+                font-size: 14px;
+                min-height: 40px;
+                min-width: 30px;
+                max-width: 40px;
+            }
+
+            .special-keys {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            textarea {
+                height: 70px;
+                font-size: 14px;
+            }
+
+            .conversion-info {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .keyboard-row.letter-row:nth-child(2) {
+                margin-left: 10px;
+            }
+
+            .keyboard-row.letter-row:nth-child(3) {
+                margin-left: 15px;
+            }
+
+            .key {
+                min-width: 25px;
+                max-width: 35px;
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CT37 Keyboard</h1>
+        
+        <div class="text-areas">
+            <div class="text-area-container">
+                <label for="inputText">Input Text:</label>
+                <textarea id="inputText" placeholder="Type using the keyboard below..."></textarea>
+            </div>
+            
+            <div class="conversion-info">
+                <strong>Conversion Info:</strong> Letters and numbers will be converted to numeric codes. 
+                Unsupported characters will be marked with [?].
+            </div>
+            
+            <div class="text-area-container">
+                <label for="outputText">Converted Numbers:</label>
+                <textarea id="outputText" placeholder="Converted numeric codes will appear here..." readonly></textarea>
+            </div>
+            <div class="text-area-container">
+                <label for="padText">Pad Text:</label>
+                <textarea id="padText" placeholder="Pad text will appear here..." readonly></textarea>
+            </div>
+        </div>
+
+        <div class="keyboard" id="keyboard">
+            <!-- QWERTY keyboard with numbers will be generated by JavaScript -->
+        </div>
+
+        <div class="special-keys">
+            <button class="special-key clear-key" onclick="clearText()">Clear</button>
+            <button class="special-key space-key" onclick="addSpace()">Space</button>
+            <button class="special-key backspace-key" onclick="backspace()">Backspace</button>
+        </div>
+
+        <button class="convert-btn" onclick="convertText()">Convert to Numbers</button>
+    </div>
+
+    <script>
+        // Conversion table
+        const chkbdCT37 = {
+            'e':'0',   's':'1',   't':'2',   'o':'3',   'n':'4',   'i':'5',   'a':'6',
+            'b':'70',  'c':'71',  'd':'72',  'f':'73',  'g':'74',  'h':'75',  'j':'76',  
+            'k':'77',  'l':'78',  'm':'79',
+            'p':'80',  'q':'81',  'r':'82',  'u':'83',  'v':'84',  'w':'85',  'x':'86',  
+            'y':'87',  'z':'88',  'l/f':'89',
+            ' ':'90',  '.':'91',  ',':'92',  '\'':'93', '?':'94',  '/':'95',  '+':'96',  
+            '-':'97',  '=':'98',  'code':'99',
+            '0':'000', '1':'111', '2':'222', '3':'333', '4':'444', '5':'555', '6':'666', 
+            '7':'777', '8':'888', '9':'999'
+        };
+
+        // Complete keyboard layout with numbers and letters
+        const keyboardLayout = [
+            { row: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'], type: 'number' },
+            { row: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], type: 'letter' },
+            { row: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], type: 'letter' },
+            { row: ['z', 'x', 'c', 'v', 'b', 'n', 'm'], type: 'letter' }
+        ];
+
+        // Generate complete keyboard with numbers and letters
+        function generateKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            
+            keyboardLayout.forEach((rowData, index) => {
+                const rowDiv = document.createElement('div');
+                
+                // Add appropriate classes based on row type
+                if (rowData.type === 'number') {
+                    rowDiv.className = 'keyboard-row number-row';
+                } else {
+                    rowDiv.className = 'keyboard-row letter-row';
+                }
+                
+                rowData.row.forEach(character => {
+                    const button = document.createElement('button');
+                    button.className = rowData.type === 'number' ? 'key number-key' : 'key';
+                    button.textContent = character;
+                    button.onclick = () => addCharacter(character);
+                    rowDiv.appendChild(button);
+                });
+                
+                keyboard.appendChild(rowDiv);
+            });
+        }
+
+        // Add character (letter or number) to input text area
+        function addCharacter(character) {
+            const inputText = document.getElementById('inputText');
+            inputText.value += character;
+            inputText.focus();
+        }
+
+        // Add space to input text area
+        function addSpace() {
+            const inputText = document.getElementById('inputText');
+            inputText.value += ' ';
+            inputText.focus();
+        }
+
+        // Remove last character (backspace)
+        function backspace() {
+            const inputText = document.getElementById('inputText');
+            inputText.value = inputText.value.slice(0, -1);
+            inputText.focus();
+        }
+
+        // Clear both input and output text areas
+        function clearText() {
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const padText = document.getElementById('padText');
+            inputText.value = '';
+            outputText.value = '';
+            padText.value = '';
+            inputText.focus();
+        }
+
+
+        // ----------------------------------------------------------
+        function formatOtp(inString, numPerGrp, numGrpPerRow) {
+            /**
+             * Format the inString into groups and columns
+             *
+             * @param {string} inString - string to format
+             * @param {number} numPerGrp - how many numbers in each group
+             * @param {number} numGrpPerRow - how many groups in each row
+             * @returns {string} formatted string
+             */
+            let pad = "";
+            let curCount = 0;
+            
+            for (let i of inString) {
+                if ((curCount % numPerGrp === 0) && (curCount !== 0)) {
+                    pad += " ";
+                }
+            
+                if ((curCount % (numPerGrp * numGrpPerRow) === 0) && (curCount !== 0)) {
+                    pad += "\n";
+                }
+
+                pad += i;
+                curCount += 1;
+            }
+            return pad;
+        }
+        // ----------------------------------------------------------
+
+
+
+
+
+        // Convert text from input to numbers using the conversion table
+        function convertText() {
+            const inputText = document.getElementById('inputText').value;
+            const outputText = document.getElementById('outputText');
+            const padText = document.getElementById('padText');
+            
+            let convertedText = '';
+            
+            // Process each character in the input text
+            for (let i = 0; i < inputText.length; i++) {
+                const char = inputText[i].toLowerCase(); // Convert to lowercase for matching
+                
+                if (chkbdCT37.hasOwnProperty(char)) {
+                    // Character found in conversion table
+                    convertedText += chkbdCT37[char];
+                    
+                    // Add space between codes for readability (except for the last character)
+//                    if (i < inputText.length - 1) {
+//                        convertedText += ' ';
+//                    }
+                } else {
+                    // Character not found in conversion table
+                    convertedText += '[?]';
+                    
+//                    // Add space between codes for readability (except for the last character)
+//                    if (i < inputText.length - 1) {
+//                        convertedText += ' ';
+//                    }
+                }
+            }
+            
+            outputText.value = convertedText;
+            padText.value = formatOtp(convertedText, 5, 5);
+        }
+
+        // Initialize keyboard when page loads
+        window.onload = function() {
+            generateKeyboard();
+        };
+
+        // Allow physical keyboard input as well
+        document.getElementById('inputText').addEventListener('input', function() {
+            // This allows users to also type with their physical keyboard
+        });
+    </script>
+</body>
+</html>
